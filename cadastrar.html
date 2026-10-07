@@ -13,7 +13,7 @@
     <div class="bg-white shadow-lg rounded-lg p-4">
         <a href="/index.html" class="mb-5 my-8">Voltar</a>
         <h1 class="font-bold text-xl mb-6">Cadastre-se</h1>
-        <form  onsubmit="cadastrar()" class="flex flex-col w-80">
+        <form onsubmit="cadastrar()" class="flex flex-col w-80">
             <Label for="nome" class="uppercase text-sm font-bold mb-2 block">Nome</Label>
             <input type="text" placeholder="seu nome" id="nome" required
                 class="pl-3 h-10 border-2 border-slate-400 focus:border-purple-600 duration-150 rounded outline-none mb-4" />
@@ -31,7 +31,7 @@
 
     <script>
 
-        function cadastrar(){
+        function cadastrar() {
             // corta fluxo natural do forms, já que naturalmente ele executaria o arquivo por causa do "action"
             event.preventDefault();
 
@@ -46,7 +46,7 @@
             }
 
 
-            fetch("https://js-lista-de-tarefas-api.onrender.com/usuarios",{
+            fetch("https://js-lista-de-tarefas-api.onrender.com/usuarios", {
                 method: "post",
                 headers: {
                     "Content-type": "application/json"
@@ -54,19 +54,19 @@
                 body: JSON.stringify(dados)
             })
 
-            .then(resposta => resposta.json())
-            .then(json => {
-            if(json.tipo == "error"){
-                alert(json.mensagem);
-                return;
-            }
+                .then(resposta => resposta.json())
+                .then(json => {
+                    if (json.tipo == "error") {
+                        alert(json.mensagem);
+                        return;
+                    }
 
-            alert(json.mensagem);
-            window.location.href = "index.html";
-        })
-        .catch(error => {
-            alert(error.message);
-        })
+                    alert(json.mensagem);
+                    window.location.href = "index.html";
+                })
+                .catch(error => {
+                    alert(error.message);
+                })
 
             console.log(dados);
         }
