@@ -10,12 +10,15 @@
     
     <div class="bg-white shadow-lg rounded-lg p-4">
         <h1 class="font-bold text-xl mb-6">Seja bem vindo(a)</h1>
+        
         <form onsubmit="logar()" class="flex flex-col w-80">
             <Label for="email" class="uppercase text-sm font-bold mb-2 block">E-mail</Label>
             <input type="email" placeholder="email@gmail.com" required id="email" class="pl-3 h-10 border-2 border-slate-400 focus:border-purple-600 duration-150 rounded outline-none mb-4"/>
+
             <Label for="email" class="uppercase text-sm font-bold mb-2 block">Senha</Label>
             <input type="password" placeholder="********" required id="senha" class="pl-3 h-10 border-2 border-slate-400 focus:border-purple-600 duration-150 rounded outline-none mb-4"/>
             <a href="/cadastrar.html" class="my-8">Cadastre-se</a>
+
             <button class="w-full h-10 rounded bg-purple-600 hover:bg-purple-600 duration-200 hover:text-white font-bold">Logar</button>
         </form>
     </div>
@@ -51,7 +54,7 @@
                         return;
                     }
 
-                    sessionStorage.setItem("usuario", JSON.stringify(json.usuario));
+                    sessionStorage.setItem("usuario", JSON.stringify(json.usuario))
                     alert(json.mensagem);
                     window.location.href = "tarefas.html";
                 })
