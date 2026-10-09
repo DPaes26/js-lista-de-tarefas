@@ -41,7 +41,7 @@ function carregarTarefas(listaTarefas) {
                     <h3 class="font-bold mb-4">${tarefa.titulo}</h3>
                     <p>${tarefa.descricao}</p>
                         <div class="flex justify-end gap-3">
-                            <box-icon type='solid' class="cursor-pointer hover:fill-purple-500" name='pencil'></box-icon>
+                            <box-icon onclick="abrirFormEditar(${tarefa.id})" type='solid' class="cursor-pointer hover:fill-purple-500" name='pencil'></box-icon>
                             <box-icon onclick="deletarTarefa(${tarefa.id})" name='trash' class="cursor-pointer hover:fill-purple-500"></box-icon>
                         </div>
                 </div>
@@ -62,6 +62,30 @@ function fecharFormCriar() {
     let formCriar = document.querySelector("#form-criar");
     overlay.classList.add("opacity-0", "invisible");
     formCriar.classList.add("opacity-0", "invisible");
+}
+
+function abrirFormEditar(id) {
+    let overlay = document.querySelector("#overlay");
+    let formEditar = document.querySelector("#form-editar");
+
+    let idEdicao = document.querySelector("#idEdicao");
+    let tituloEdicao = document.querySelector("#tituloEdicao");
+    let descricaoEdicao = document.querySelector("#descricaoEdicao");
+
+    let tarefa = tarefas.find(tarefa => tarefa.id == id);
+    idEdicao.value = tarefa.id;
+    tituloEdicao.value = tarefa.titulo;
+    descricaoEdicao.value = tarefa.descricao;
+
+    overlay.classList.remove("opacity-0", "invisible");
+    formEditar.classList.remove("opacity-0", "invisible");
+}
+
+function fecharFormEditar() {
+    let overlay = document.querySelector("#overlay");
+    let formEditar = document.querySelector("#form-editar");
+    overlay.classList.add("opacity-0", "invisible");
+    formEditar.classList.add("opacity-0", "invisible");
 }
 
 function criarTarefa() {
@@ -96,8 +120,8 @@ function criarTarefa() {
     }
 }
 
-function deletarTarefa(id){
-    if(confirm ("Deseja realmente apagar?")){
+function deletarTarefa(id) {
+    if (confirm("Deseja realmente apagar?")) {
         fetch(`https://js-lista-de-tarefas-api.onrender.com/tarefas/${id} `, {
             method: "delete",
             headers: {
@@ -109,5 +133,52 @@ function deletarTarefa(id){
                 alert(json.mensagem)
                 buscarTarefas();
             })
+    }
+}
+
+function editarTarefa() {
+    event.preventDefault();
+    try {
+        let usuario = JSON.parse(sessionStorage.getItem("usuario")) || null;
+        let id = document.querySelector("#idEdicao");
+        let titulo = document.querySelector("#tituloEdicao");
+        let descricao = document.querySelector("#descricaoEdicao");
+
+        let dados = {
+
+            titulo: titulo.value,
+            descricao: descricao.value,
+            usuario_id: usuario.id
+        }
+
+        fetch(`https://js-lista-de-tarefas-api.onrender.com/tarefas/${id.value}`, {
+            method: "put",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(dados)
+        })
+            .then(resposta => resposta.json())
+            .then(json => {
+                alert(json.mensagem);
+                fecharFormEditar();
+                buscarTarefas();
+            })
+
+    } catch (error) {
+        alert("Error: ", error.message);
+    }
+}
+
+function pesquisarTarefas(palavra) {
+    // Se a palavra tiver 3 ou mais letras
+    if(palavra.length == 0){
+        carregarTarefas(tarefas)
+        return;
+    }
+    if(palavra.length >= 3) {
+        let tarefasFiltradas = tarefas.filter(tarefa => tarefa.titulo.toLowerCase().includes(palavra.toLowerCase()))
+
+        carregarTarefas(tarefasFiltradas);
     }
 }
